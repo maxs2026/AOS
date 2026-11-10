@@ -27,8 +27,14 @@ public class OverlayService extends Service{
  notif(c,76,39,d,0);notif(c,88,39,d,1);notif(c,100,39,d,2);
  // cellular bars, rising heights with rounded ends
  fill(c,Color.WHITE);float sx=w-153*d;for(int i=0;i<4;i++)c.drawRoundRect(sx+i*5*d,49*d-(5+i*3.5f)*d,sx+(i+1)*5*d-1*d,49*d,1.5f*d,1.5f*d,p);
- // wifi: three arcs and center dot
- stroke(Color.WHITE,1.7f*d);c.drawArc(w-113*d,27*d,w-89*d,49*d,225,90,false,p);c.drawArc(w-108*d,32*d,w-94*d,46*d,225,90,false,p);c.drawArc(w-103*d,37*d,w-99*d,43*d,225,90,false,p);fill(c,Color.WHITE);c.drawCircle(w-101*d,49*d,1.5f*d,p);
+ // iOS Wi-Fi glyph: three balanced curved bands + round signal point
+ float wx=w-78*d,wy=40*d;
+ stroke(Color.WHITE,1.65f*d);
+ // draw upper semicircular bands (clean, symmetric spacing)
+ c.drawArc(wx-10*d,wy-10*d,wx+10*d,wy+10*d,225,90,false,p);
+ c.drawArc(wx-6.8f*d,wy-6.8f*d,wx+6.8f*d,wy+6.8f*d,225,90,false,p);
+ c.drawArc(wx-3.5f*d,wy-3.5f*d,wx+3.5f*d,wy+3.5f*d,225,90,false,p);
+ fill(c,Color.WHITE);c.drawCircle(wx,wy+1.1f*d,1.65f*d,p);
  // Rebuilt iOS-style battery: capsule, level fill and centered percentage
  Intent b=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
  int lev=b==null?100:b.getIntExtra(BatteryManager.EXTRA_LEVEL,100),sc=b==null?100:b.getIntExtra(BatteryManager.EXTRA_SCALE,100);

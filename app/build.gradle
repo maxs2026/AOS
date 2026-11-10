@@ -1,0 +1,2 @@
+plugins { id 'com.android.application' }
+android { namespace 'com.aos.statusbar'; compileSdk 35; defaultConfig { applicationId 'com.aos.statusbar'; minSdk 26; targetSdk 32; versionCode 1; versionName '1.0' } }

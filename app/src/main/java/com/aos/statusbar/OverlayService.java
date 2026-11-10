@@ -29,8 +29,21 @@ public class OverlayService extends Service{
  fill(c,Color.WHITE);float sx=w-153*d;for(int i=0;i<4;i++)c.drawRoundRect(sx+i*5*d,49*d-(5+i*3.5f)*d,sx+(i+1)*5*d-1*d,49*d,1.5f*d,1.5f*d,p);
  // wifi: three arcs and center dot
  stroke(Color.WHITE,1.7f*d);c.drawArc(w-113*d,27*d,w-89*d,49*d,225,90,false,p);c.drawArc(w-108*d,32*d,w-94*d,46*d,225,90,false,p);c.drawArc(w-103*d,37*d,w-99*d,43*d,225,90,false,p);fill(c,Color.WHITE);c.drawCircle(w-101*d,49*d,1.5f*d,p);
- // battery shell, terminal, interior level, percentage
- Intent b=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));int lev=b==null?100:b.getIntExtra(BatteryManager.EXTRA_LEVEL,100),sc=b==null?100:b.getIntExtra(BatteryManager.EXTRA_SCALE,100),pct=sc>0?lev*100/sc:100;float bx=w-69*d,by=31*d;
- stroke(Color.WHITE,1.4f*d);c.drawRoundRect(bx,by,bx+27*d,by+16*d,3*d,3*d,p);fill(c,Color.WHITE);c.drawRoundRect(bx+27*d,by+5*d,bx+29*d,by+11*d,1*d,1*d,p);c.drawRoundRect(bx+2*d,by+2*d,bx+2*d+23*d*pct/100f,by+14*d,2*d,2*d,p);text(c,pct+"%",w-34*d,44*d,10*d,true);
+ // iOS-style battery capsule: compact outline, terminal, level fill, and clear percentage
+ Intent b=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+ int lev=b==null?100:b.getIntExtra(BatteryManager.EXTRA_LEVEL,100);
+ int sc=b==null?100:b.getIntExtra(BatteryManager.EXTRA_SCALE,100);
+ int pct=sc>0?Math.max(0,Math.min(100,lev*100/sc)):100;
+ float bx=w-78*d,by=33*d,bw=25*d,bh=13*d;
+ // subtle dark inset behind white shell for contrast
+ fill(c,0xff536b88);c.drawRoundRect(bx,by,bx+bw,by+bh,3.8f*d,3.8f*d,p);
+ stroke(Color.WHITE,1.35f*d);c.drawRoundRect(bx,by,bx+bw,by+bh,3.8f*d,3.8f*d,p);
+ fill(c,Color.WHITE);
+ c.drawRoundRect(bx+bw,by+4*d,bx+bw+2.2f*d,by+9*d,1*d,1*d,p);
+ // level inset with proportional fill, leaving a clean border
+ float inner= bw-4*d, fillW=inner*pct/100f;
+ if(pct>0)c.drawRoundRect(bx+2*d,by+2*d,bx+2*d+fillW,by+bh-2*d,2*d,2*d,p);
+ // percentage label in bold, aligned vertically beside the capsule
+ text(c,pct+"%",w-43*d,44*d,11*d,true);
  }}
 }

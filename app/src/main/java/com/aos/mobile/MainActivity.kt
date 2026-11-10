@@ -243,7 +243,7 @@ private class ReferenceStatusBarView(context: android.content.Context) : View(co
     }
 
     private fun drawBattery(c: Canvas, x: Float, y: Float, u: Float) {
-        val levelIntent = context.registerReceiver(null, android.content.IntentFilter(BatteryManager.ACTION_BATTERY_CHANGED))
+        val levelIntent = context.registerReceiver(null, android.content.IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED))
         val level = levelIntent?.getIntExtra(BatteryManager.EXTRA_LEVEL, 100) ?: 100
         val scale = levelIntent?.getIntExtra(BatteryManager.EXTRA_SCALE, 100) ?: 100
         val percent = if (scale > 0) (level * 100 / scale).coerceIn(0, 100) else 100

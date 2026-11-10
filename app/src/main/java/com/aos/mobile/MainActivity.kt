@@ -75,7 +75,7 @@ fun AOSApp(activity: MainActivity) {
                         Text("LIVE PREVIEW", color = Color(0xFF9BAAC0), fontSize = 10.sp, letterSpacing = 1.7.sp, modifier = Modifier.padding(start = 4.dp, bottom = 10.dp))
                         AndroidView(
                             factory = { context -> AOSStatusBarView(context) },
-                            modifier = Modifier.fillMaxWidth().height(76.dp)
+                            modifier = Modifier.fillMaxWidth().height(44.dp)
                         )
                         Text("Reference-matched glass status bar", color = Color(0xFFB8C4D5), fontSize = 11.sp, modifier = Modifier.padding(start = 4.dp, top = 9.dp, bottom = 3.dp))
                     }

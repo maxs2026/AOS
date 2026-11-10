@@ -82,7 +82,7 @@ class AOSStatusBarService : Service() {
     }
 }
 
-private class AOSStatusBarView(context: Context) : View(context) {
+class AOSStatusBarView(context: Context) : View(context) {
     private val density = resources.displayMetrics.density
     private val white = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE }
     private val text = Paint(Paint.ANTI_ALIAS_FLAG).apply {

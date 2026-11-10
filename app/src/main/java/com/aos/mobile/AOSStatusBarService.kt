@@ -22,10 +22,10 @@ class AOSStatusBarService: Service() {
   if(bar!=null)return
   val root=LinearLayout(this).apply{orientation=LinearLayout.HORIZONTAL;gravity=Gravity.CENTER_VERTICAL;setPadding(dp(16),0,dp(16),0);setBackgroundColor(Color.TRANSPARENT)}
   val left=LinearLayout(this).apply{gravity=Gravity.CENTER_VERTICAL}
-  val clock=TextView(this).apply{tag="clock";textColor=Color.WHITE;textSize=14f;typeface=Typeface.DEFAULT_BOLD}
-  left.addView(clock);left.addView(TextView(this).apply{tag="notif";text="  ●  ▪";textColor=Color.WHITE;textSize=11f})
+  val clock=TextView(this).apply{tag="clock";setTextColor(Color.WHITE);textSize=14f;typeface=Typeface.DEFAULT_BOLD}
+  left.addView(clock);left.addView(TextView(this).apply{tag="notif";text="  ●  ▪";setTextColor(Color.WHITE);textSize=11f})
   root.addView(left,LinearLayout.LayoutParams(0,dp(30),1f))
-  root.addView(TextView(this).apply{tag="right";textColor=Color.WHITE;textSize=12f;typeface=Typeface.DEFAULT_BOLD;gravity=Gravity.CENTER_VERTICAL})
+  root.addView(TextView(this).apply{tag="right";setTextColor(Color.WHITE);textSize=12f;typeface=Typeface.DEFAULT_BOLD;gravity=Gravity.CENTER_VERTICAL})
   bar=root
   val p=WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT,dp(34),WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,android.graphics.PixelFormat.TRANSLUCENT)
   p.gravity=Gravity.TOP or Gravity.START;p.y=0

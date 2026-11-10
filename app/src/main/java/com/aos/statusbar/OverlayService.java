@@ -23,7 +23,7 @@ public class OverlayService extends Service{
  }
  protected void onDraw(Canvas c){float d=getResources().getDisplayMetrics().density,w=getWidth();
  p.setShader(new LinearGradient(0,24*d,w,54*d,new int[]{0xf06d829e,0xf04b6381,0xf039506f},null,Shader.TileMode.CLAMP));c.drawRect(0,24*d,w,54*d,p);p.setShader(null);
- text(c,new SimpleDateFormat("HH:mm").format(new Date()),18*d,44*d,15*d,true);
+ text(c,new SimpleDateFormat("h:mm a",java.util.Locale.US).format(new Date()),18*d,44*d,15*d,true);
  notif(c,76,39,d,0);notif(c,88,39,d,1);notif(c,100,39,d,2);
  // cellular bars, rising heights with rounded ends
  fill(c,Color.WHITE);float sx=w-153*d;for(int i=0;i<4;i++)c.drawRoundRect(sx+i*5*d,45*d-(5+i*3.5f)*d,sx+(i+1)*5*d-1*d,45*d,1.5f*d,1.5f*d,p);

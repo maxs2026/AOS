@@ -27,16 +27,30 @@ public class OverlayService extends Service{
  notif(c,76,39,d,0);notif(c,88,39,d,1);notif(c,100,39,d,2);
  // compact cellular bars, closely grouped with Wi-Fi and battery
  fill(c,Color.WHITE);float sx=w-105*d;for(int i=0;i<4;i++)c.drawRoundRect(sx+i*4.4f*d,49*d-(5+i*3.5f)*d,sx+(i+1)*4.4f*d-0.8f*d,49*d,1.3f*d,1.3f*d,p);
- // iOS Wi-Fi: filled, tapered curved bands (not Android-style stroked arcs)
+ // Apple-like Wi-Fi glyph: three separate solid curved signal bands + dot
  float wx=w-72*d,wy=48.5f*d;
  fill(c,Color.WHITE);
- // Smooth iOS Wi-Fi glyph: broad tapered arches and a round signal dot
- Path wifi=new Path();
- wifi.moveTo(wx-10.2f*d,wy-1.2f*d);wifi.cubicTo(wx-5.8f*d,wy-6.1f*d,wx-2.5f*d,wy-7.7f*d,wx,wy-7.7f*d);wifi.cubicTo(wx+2.5f*d,wy-7.7f*d,wx+5.8f*d,wy-6.1f*d,wx+10.2f*d,wy-1.2f*d);
- wifi.cubicTo(wx+8.8f*d,wy-0.4f*d,wx+8.0f*d,wy-0.2f*d,wx+7.2f*d,wy-0.9f*d);wifi.cubicTo(wx+3.9f*d,wy-4.5f*d,wx+1.7f*d,wy-5.2f*d,wx,wy-5.2f*d);wifi.cubicTo(wx-1.7f*d,wy-5.2f*d,wx-3.9f*d,wy-4.5f*d,wx-7.2f*d,wy-0.9f*d);wifi.cubicTo(wx-8.0f*d,wy-0.2f*d,wx-8.8f*d,wy-0.4f*d,wx-10.2f*d,wy-1.2f*d);wifi.close();c.drawPath(wifi,p);
- Path mid=new Path();
- mid.moveTo(wx-6.4f*d,wy-1.2f*d);mid.cubicTo(wx-3.8f*d,wy-3.7f*d,wx-1.5f*d,wy-4.5f*d,wx,wy-4.5f*d);mid.cubicTo(wx+1.5f*d,wy-4.5f*d,wx+3.8f*d,wy-3.7f*d,wx+6.4f*d,wy-1.2f*d);
- mid.cubicTo(wx+5.2f*d,wy-0.2f*d,wx+4.4f*d,wy-0.2f*d,wx+3.5f*d,wy-1.0f*d);mid.cubicTo(wx+1.8f*d,wy-2.5f*d,wx+0.8f*d,wy-2.9f*d,wx,wy-2.9f*d);mid.cubicTo(wx-0.8f*d,wy-2.9f*d,wx-1.8f*d,wy-2.5f*d,wx-3.5f*d,wy-1.0f*d);mid.cubicTo(wx-4.4f*d,wy-0.2f*d,wx-5.2f*d,wy-0.2f*d,wx-6.4f*d,wy-1.2f*d);mid.close();c.drawPath(mid,p);
+ // Outer band (wide, gently tapered)
+ Path wifiOuter=new Path();
+ wifiOuter.moveTo(wx-11*d,wy-1*d);
+ wifiOuter.cubicTo(wx-5.8f*d,wy-7.5f*d,wx+5.8f*d,wy-7.5f*d,wx+11*d,wy-1*d);
+ wifiOuter.cubicTo(wx+9.8f*d,wy+0.1f*d,wx+8.9f*d,wy+0.1f*d,wx+7.8f*d,wy-1*d);
+ wifiOuter.cubicTo(wx+3.8f*d,wy-5.2f*d,wx-3.8f*d,wy-5.2f*d,wx-7.8f*d,wy-1*d);
+ wifiOuter.cubicTo(wx-8.9f*d,wy+0.1f*d,wx-9.8f*d,wy+0.1f*d,wx-11*d,wy-1*d);wifiOuter.close();c.drawPath(wifiOuter,p);
+ // Middle band
+ Path wifiMid=new Path();
+ wifiMid.moveTo(wx-7.1f*d,wy-1*d);
+ wifiMid.cubicTo(wx-3.5f*d,wy-4.8f*d,wx+3.5f*d,wy-4.8f*d,wx+7.1f*d,wy-1*d);
+ wifiMid.cubicTo(wx+5.9f*d,wy+0.1f*d,wx+5*d,wy+0.1f*d,wx+4*d,wy-1*d);
+ wifiMid.cubicTo(wx+1.8f*d,wy-3*d,wx-1.8f*d,wy-3*d,wx-4*d,wy-1*d);
+ wifiMid.cubicTo(wx-5*d,wy+0.1f*d,wx-5.9f*d,wy+0.1f*d,wx-7.1f*d,wy-1*d);wifiMid.close();c.drawPath(wifiMid,p);
+ // Inner curved band
+ Path wifiInner=new Path();
+ wifiInner.moveTo(wx-3.4f*d,wy-1*d);
+ wifiInner.cubicTo(wx-1.7f*d,wy-2.8f*d,wx+1.7f*d,wy-2.8f*d,wx+3.4f*d,wy-1*d);
+ wifiInner.cubicTo(wx+2.4f*d,wy+0.2f*d,wx+1.5f*d,wy+0.2f*d,wx+0.8f*d,wy-0.6f*d);
+ wifiInner.cubicTo(wx+0.3f*d,wy-1.1f*d,wx-0.3f*d,wy-1.1f*d,wx-0.8f*d,wy-0.6f*d);
+ wifiInner.cubicTo(wx-1.5f*d,wy+0.2f*d,wx-2.4f*d,wy+0.2f*d,wx-3.4f*d,wy-1*d);wifiInner.close();c.drawPath(wifiInner,p);
  c.drawCircle(wx,wy,1.45f*d,p);
  // Rebuilt iOS-style battery: capsule, level fill and centered percentage
  Intent b=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));

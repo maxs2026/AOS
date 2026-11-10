@@ -29,21 +29,22 @@ public class OverlayService extends Service{
  fill(c,Color.WHITE);float sx=w-153*d;for(int i=0;i<4;i++)c.drawRoundRect(sx+i*5*d,49*d-(5+i*3.5f)*d,sx+(i+1)*5*d-1*d,49*d,1.5f*d,1.5f*d,p);
  // wifi: three arcs and center dot
  stroke(Color.WHITE,1.7f*d);c.drawArc(w-113*d,27*d,w-89*d,49*d,225,90,false,p);c.drawArc(w-108*d,32*d,w-94*d,46*d,225,90,false,p);c.drawArc(w-103*d,37*d,w-99*d,43*d,225,90,false,p);fill(c,Color.WHITE);c.drawCircle(w-101*d,49*d,1.5f*d,p);
- // iOS-style battery capsule: compact outline, terminal, level fill, and clear percentage
+ // Reference-style battery: horizontal capsule with percentage INSIDE its body
  Intent b=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
  int lev=b==null?100:b.getIntExtra(BatteryManager.EXTRA_LEVEL,100);
  int sc=b==null?100:b.getIntExtra(BatteryManager.EXTRA_SCALE,100);
  int pct=sc>0?Math.max(0,Math.min(100,lev*100/sc)):100;
- float bx=w-78*d,by=33*d,bw=25*d,bh=13*d;
- // subtle dark inset behind white shell for contrast
- fill(c,0xff536b88);c.drawRoundRect(bx,by,bx+bw,by+bh,3.8f*d,3.8f*d,p);
- stroke(Color.WHITE,1.35f*d);c.drawRoundRect(bx,by,bx+bw,by+bh,3.8f*d,3.8f*d,p);
- fill(c,Color.WHITE);
- c.drawRoundRect(bx+bw,by+4*d,bx+bw+2.2f*d,by+9*d,1*d,1*d,p);
- // level inset with proportional fill, leaving a clean border
- float inner= bw-4*d, fillW=inner*pct/100f;
- if(pct>0)c.drawRoundRect(bx+2*d,by+2*d,bx+2*d+fillW,by+bh-2*d,2*d,2*d,p);
- // percentage label in bold, aligned vertically beside the capsule
- text(c,pct+"%",w-43*d,44*d,11*d,true);
+ float bx=w-91*d,by=34*d,bw=34*d,bh=12*d;
+ // translucent dark capsule, crisp white border and tiny right terminal
+ fill(c,0xff536b88);c.drawRoundRect(bx,by,bx+bw,by+bh,6*d,6*d,p);
+ stroke(Color.WHITE,1.25f*d);c.drawRoundRect(bx,by,bx+bw,by+bh,6*d,6*d,p);
+ fill(c,Color.WHITE);c.drawRoundRect(bx+bw,by+3.5f*d,bx+bw+2*d,by+8.5f*d,1*d,1*d,p);
+ // percentage is drawn centered inside the battery, over the level indicator
+ p.setShader(null);p.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));p.setTextSize(8.5f*d);
+ String batteryLabel=pct+"%";float labelW=p.measureText(batteryLabel);
+ // Draw the live level fill as a subtle translucent white behind the text
+ fill(c,0x66ffffff);float levelW=(bw-3*d)*pct/100f;
+ c.drawRoundRect(bx+1.5f*d,by+1.5f*d,bx+1.5f*d+levelW,by+bh-1.5f*d,4*d,4*d,p);
+ fill(c,Color.WHITE);c.drawText(batteryLabel,bx+(bw-labelW)/2,by+8.7f*d,p);
  }}
 }

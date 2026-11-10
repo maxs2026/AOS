@@ -51,12 +51,12 @@ class AOSStatusBarService : Service() {
         bar = view
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
-            dp(76),
+            dp(28),
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                0,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
@@ -114,22 +114,25 @@ class AOSStatusBarView(context: Context) : View(context) {
         background.shader = null
 
         val now = SimpleDateFormat("H:mm", Locale.getDefault()).format(Date())
-        text.textSize = 29f
+        val centerY = h * 0.52f
+        text.textSize = 20f
         text.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-        canvas.drawText(now, 58f, 49f, text)
+        canvas.drawText(now, w * 0.075f, centerY + 6.5f, text)
 
-        drawMessenger(canvas, 154f, 36f)
-        drawBell(canvas, 200f, 36f)
-        drawShield(canvas, 245f, 36f)
-
-        val right = w - 56f
-        drawBattery(canvas, right - 58f, 36f)
-        drawWifi(canvas, right - 151f, 36f)
-        drawSignal(canvas, right - 215f, 36f)
+        val iconScale = (h / 28f).coerceIn(0.78f, 1.12f)
+        val leftIconPaint = Paint(white).apply { }
+        cScale(canvas, iconScale) {
+            drawMessenger(canvas, w * 0.202f / iconScale, centerY / iconScale)
+            drawBell(canvas, w * 0.26f / iconScale, centerY / iconScale)
+            drawShield(canvas, w * 0.319f / iconScale, centerY / iconScale)
+            drawSignal(canvas, w * 0.744f / iconScale, centerY / iconScale)
+            drawWifi(canvas, w * 0.829f / iconScale, centerY / iconScale)
+            drawBattery(canvas, w * 0.885f / iconScale, centerY / iconScale)
+        }
         canvas.restoreToCount(save)
     }
 
-    private fun drawMessenger(c: Canvas, x: Float, y: Float) {
+    private fun cScale(canvas: Canvas, scale: Float, draw: () -> Unit) {\n        canvas.save()\n        canvas.scale(scale, scale)\n        draw()\n        canvas.restore()\n    }\n\n    private fun drawMessenger(c: Canvas, x: Float, y: Float) {
         white.style = Paint.Style.FILL
         c.drawCircle(x, y, 14.5f, white)
         path.reset()
@@ -185,10 +188,10 @@ class AOSStatusBarView(context: Context) : View(context) {
 
     private fun drawBattery(c: Canvas, x: Float, y: Float) {
         white.style = Paint.Style.FILL
-        c.drawRoundRect(x - 2f, y - 13f, x + 48f, y + 13f, 8f, 8f, white)
-        c.drawRoundRect(x + 49f, y - 5f, x + 53f, y + 5f, 2f, 2f, white)
+        c.drawRoundRect(x - 2f, y - 10f, x + 30f, y + 10f, 6f, 6f, white)
+        c.drawRoundRect(x + 31f, y - 4f, x + 34f, y + 4f, 1.5f, 1.5f, white)
         val dark = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.rgb(35, 57, 63); textSize = 20f; typeface = Typeface.create("sans-serif", Typeface.BOLD); textAlign = Paint.Align.CENTER }
-        c.drawText(batteryPercent().toString(), x + 23f, y + 7f, dark)
+        c.drawText(batteryPercent().toString(), x + 14f, y + 5f, dark)
     }
 
     private fun batteryPercent(): Int {

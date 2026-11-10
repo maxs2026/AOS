@@ -135,14 +135,14 @@ private class ReferenceStatusBarView(context: android.content.Context) : View(co
             handler.postDelayed(this, 1000L)
         }
     }
-    private val white = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE; style = Paint.Style.FILL }
-    private val dark = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.rgb(45, 68, 103); style = Paint.Style.FILL }
+    private val white = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = android.graphics.Color.WHITE; style = Paint.Style.FILL }
+    private val dark = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = android.graphics.Color.rgb(45, 68, 103); style = Paint.Style.FILL }
     private val clockPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
+        color = android.graphics.Color.WHITE
         typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
     private val batteryText = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.rgb(42, 62, 75)
+        color = android.graphics.Color.rgb(42, 62, 75)
         typeface = Typeface.create("sans-serif", Typeface.BOLD)
         textAlign = Paint.Align.CENTER
     }
@@ -161,7 +161,7 @@ private class ReferenceStatusBarView(context: android.content.Context) : View(co
         val gradient = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             shader = LinearGradient(
                 0f, 0f, w, h,
-                intArrayOf(Color.rgb(0, 100, 190), Color.rgb(55, 82, 132), Color.rgb(34, 68, 77), Color.rgb(9, 43, 39)),
+                intArrayOf(android.graphics.Color.rgb(0, 100, 190), android.graphics.Color.rgb(55, 82, 132), android.graphics.Color.rgb(34, 68, 77), android.graphics.Color.rgb(9, 43, 39)),
                 floatArrayOf(0f, .36f, .73f, 1f),
                 Shader.TileMode.CLAMP
             )
@@ -220,7 +220,7 @@ private class ReferenceStatusBarView(context: android.content.Context) : View(co
         path.quadTo(x - 8f*u, y + 12f*u, x - 11f*u, y + 3f*u)
         path.lineTo(x - 12f*u, y - 11f*u); path.close()
         c.drawPath(path, white)
-        val check = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.rgb(48, 72, 103); style = Paint.Style.STROKE; strokeWidth = 2.4f*u; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND }
+        val check = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = android.graphics.Color.rgb(48, 72, 103); style = Paint.Style.STROKE; strokeWidth = 2.4f*u; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND }
         path.reset(); path.moveTo(x - 5f*u, y); path.lineTo(x - 1f*u, y + 4f*u); path.lineTo(x + 6f*u, y - 4f*u)
         c.drawPath(path, check)
     }
@@ -236,7 +236,7 @@ private class ReferenceStatusBarView(context: android.content.Context) : View(co
     }
 
     private fun drawWifi(c: Canvas, x: Float, y: Float, u: Float) {
-        val p = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE; style = Paint.Style.STROKE; strokeWidth = 3.7f*u; strokeCap = Paint.Cap.ROUND }
+        val p = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = android.graphics.Color.WHITE; style = Paint.Style.STROKE; strokeWidth = 3.7f*u; strokeCap = Paint.Cap.ROUND }
         c.drawArc(RectF(x - 18f*u, y - 14f*u, x + 18f*u, y + 17f*u), 220f, 100f, false, p)
         c.drawArc(RectF(x - 11f*u, y - 7f*u, x + 11f*u, y + 14f*u), 220f, 100f, false, p)
         c.drawCircle(x, y + 10f*u, 2.7f*u, white)

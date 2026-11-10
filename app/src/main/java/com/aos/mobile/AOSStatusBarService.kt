@@ -132,7 +132,14 @@ class AOSStatusBarView(context: Context) : View(context) {
         canvas.restoreToCount(save)
     }
 
-    private fun cScale(canvas: Canvas, scale: Float, draw: () -> Unit) {\n        canvas.save()\n        canvas.scale(scale, scale)\n        draw()\n        canvas.restore()\n    }\n\n    private fun drawMessenger(c: Canvas, x: Float, y: Float) {
+    private fun cScale(canvas: Canvas, scale: Float, draw: () -> Unit) {
+        canvas.save()
+        canvas.scale(scale, scale)
+        draw()
+        canvas.restore()
+    }
+
+    private fun drawMessenger(c: Canvas, x: Float, y: Float) {
         white.style = Paint.Style.FILL
         c.drawCircle(x, y, 14.5f, white)
         path.reset()

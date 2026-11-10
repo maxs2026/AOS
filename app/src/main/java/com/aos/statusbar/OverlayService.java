@@ -29,22 +29,26 @@ public class OverlayService extends Service{
  fill(c,Color.WHITE);float sx=w-153*d;for(int i=0;i<4;i++)c.drawRoundRect(sx+i*5*d,49*d-(5+i*3.5f)*d,sx+(i+1)*5*d-1*d,49*d,1.5f*d,1.5f*d,p);
  // wifi: three arcs and center dot
  stroke(Color.WHITE,1.7f*d);c.drawArc(w-113*d,27*d,w-89*d,49*d,225,90,false,p);c.drawArc(w-108*d,32*d,w-94*d,46*d,225,90,false,p);c.drawArc(w-103*d,37*d,w-99*d,43*d,225,90,false,p);fill(c,Color.WHITE);c.drawCircle(w-101*d,49*d,1.5f*d,p);
- // Reference-style battery: horizontal capsule with percentage INSIDE its body
+ // iOS-inspired battery (thin rounded shell, short terminal, level fill + centered percentage)
  Intent b=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
  int lev=b==null?100:b.getIntExtra(BatteryManager.EXTRA_LEVEL,100);
  int sc=b==null?100:b.getIntExtra(BatteryManager.EXTRA_SCALE,100);
  int pct=sc>0?Math.max(0,Math.min(100,lev*100/sc)):100;
- float bx=w-91*d,by=34*d,bw=34*d,bh=12*d;
- // translucent dark capsule, crisp white border and tiny right terminal
- fill(c,0xff536b88);c.drawRoundRect(bx,by,bx+bw,by+bh,6*d,6*d,p);
- stroke(Color.WHITE,1.25f*d);c.drawRoundRect(bx,by,bx+bw,by+bh,6*d,6*d,p);
- fill(c,Color.WHITE);c.drawRoundRect(bx+bw,by+3.5f*d,bx+bw+2*d,by+8.5f*d,1*d,1*d,p);
- // percentage is drawn centered inside the battery, over the level indicator
- p.setShader(null);p.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));p.setTextSize(8.5f*d);
+ float bx=w-91*d,by=34*d,bw=32*d,bh=12*d;
+ // outer shell: transparent glass interior and a fine white contour
+ fill(c,0x225ffffff);c.drawRoundRect(bx,by,bx+bw,by+bh,3.4f*d,3.4f*d,p);
+ stroke(Color.WHITE,1.05f*d);c.drawRoundRect(bx,by,bx+bw,by+bh,3.4f*d,3.4f*d,p);
+ // terminal is a tiny centered rounded nub
+ fill(c,0xfff5f7fb);c.drawRoundRect(bx+bw,by+3.6f*d,bx+bw+1.7f*d,by+8.4f*d,.65f*d,.65f*d,p);
+ // iOS battery level fill (green when charging, otherwise white)
+ boolean charging=b!=null&&(b.getIntExtra(BatteryManager.EXTRA_STATUS,-1)==BatteryManager.BATTERY_STATUS_CHARGING||b.getIntExtra(BatteryManager.EXTRA_STATUS,-1)==BatteryManager.BATTERY_STATUS_FULL);
+ int levelColor=charging?0xff65d66f:Color.WHITE;
+ float ix=bx+1.5f*d,iy=by+1.5f*d,iw=bw-3*d,ih=bh-3*d;
+ fill(c,levelColor);if(pct>0)c.drawRoundRect(ix,iy,ix+iw*pct/100f,iy+ih,2*d,2*d,p);
+ // small bold percent centered in the capsule; dark ink on filled region for legibility
+ p.setShader(null);p.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));p.setTextSize(7.6f*d);
  String batteryLabel=pct+"%";float labelW=p.measureText(batteryLabel);
- // Draw the live level fill as a subtle translucent white behind the text
- fill(c,0x66ffffff);float levelW=(bw-3*d)*pct/100f;
- c.drawRoundRect(bx+1.5f*d,by+1.5f*d,bx+1.5f*d+levelW,by+bh-1.5f*d,4*d,4*d,p);
- fill(c,Color.WHITE);c.drawText(batteryLabel,bx+(bw-labelW)/2,by+8.7f*d,p);
+ fill(c,pct>=45?0xff26384a:Color.WHITE);
+ c.drawText(batteryLabel,bx+(bw-labelW)/2,by+8.2f*d,p);
  }}
 }

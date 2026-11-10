@@ -36,7 +36,7 @@ public class OverlayService extends Service{
  int pct=sc>0?Math.max(0,Math.min(100,lev*100/sc)):100;
  float bx=w-91*d,by=34*d,bw=32*d,bh=12*d;
  // outer shell: transparent glass interior and a fine white contour
- fill(c,0x225ffffff);c.drawRoundRect(bx,by,bx+bw,by+bh,3.4f*d,3.4f*d,p);
+ fill(c,0x22ffffff);c.drawRoundRect(bx,by,bx+bw,by+bh,3.4f*d,3.4f*d,p);
  stroke(Color.WHITE,1.05f*d);c.drawRoundRect(bx,by,bx+bw,by+bh,3.4f*d,3.4f*d,p);
  // terminal is a tiny centered rounded nub
  fill(c,0xfff5f7fb);c.drawRoundRect(bx+bw,by+3.6f*d,bx+bw+1.7f*d,by+8.4f*d,.65f*d,.65f*d,p);

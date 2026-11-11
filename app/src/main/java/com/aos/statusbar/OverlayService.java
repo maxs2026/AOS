@@ -56,16 +56,16 @@ public class OverlayService extends Service{
  Intent b=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
  int lev=b==null?100:b.getIntExtra(BatteryManager.EXTRA_LEVEL,100),sc=b==null?100:b.getIntExtra(BatteryManager.EXTRA_SCALE,100);
  int pct=sc>0?Math.max(0,Math.min(100,lev*100/sc)):100;
- float bx=w-39*d,by=10.5f*d,bw=29*d,bh=14*d;
+ float bx=w-49*d,by=8.5f*d,bw=37*d,bh=18*d;
  fill(c,0x18ffffff);c.drawRoundRect(bx,by,bx+bw,by+bh,4.2f*d,4.2f*d,p);
- float ix=bx+1.25f*d,iy=by+1.25f*d,iw=bw-2.5f*d,ih=bh-2.5f*d;
+ float ix=bx+1.5f*d,iy=by+1.5f*d,iw=bw-3*d,ih=bh-3*d;
  boolean charging=b!=null&&(b.getIntExtra(BatteryManager.EXTRA_STATUS,-1)==BatteryManager.BATTERY_STATUS_CHARGING||b.getIntExtra(BatteryManager.EXTRA_STATUS,-1)==BatteryManager.BATTERY_STATUS_FULL);
  int levelColor=charging?0xff65d66f:Color.WHITE;
  if(pct>0){fill(c,levelColor);c.drawRoundRect(ix,iy,ix+iw*pct/100f,iy+ih,3.1f*d,3.1f*d,p);}
  stroke(0xfff7f9fc,1.15f*d);c.drawRoundRect(bx,by,bx+bw,by+bh,4.2f*d,4.2f*d,p);
  fill(c,0xfff7f9fc);c.drawRoundRect(bx+bw+1*d,by+4.4f*d,bx+bw+2.8f*d,by+9.6f*d,.8f*d,.8f*d,p);
- p.setShader(null);p.setStyle(Paint.Style.FILL);p.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));p.setTextSize(8.1f*d);
+ p.setShader(null);p.setStyle(Paint.Style.FILL);p.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));p.setTextSize(9.2f*d;
  String batteryLabel=pct+"%";float labelW=p.measureText(batteryLabel);
- fill(c,pct>=55?0xff26384a:Color.WHITE);c.drawText(batteryLabel,bx+(bw-labelW)/2,by+9.7f*d,p);
+ fill(c,pct>=55?0xff26384a:Color.WHITE);c.drawText(batteryLabel,bx+(bw-labelW)/2,by+12.2f*d,p);
  }}
 }

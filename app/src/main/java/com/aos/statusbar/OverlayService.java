@@ -13,18 +13,18 @@ public class OverlayService extends Service{
  void text(Canvas c,String s,float x,float y,float z,boolean bold){fill(c,Color.WHITE);p.setTypeface(Typeface.create("sans-serif",bold?Typeface.BOLD:Typeface.NORMAL));p.setTextSize(z);c.drawText(s,x,y,p);}
  void notif(Canvas c,float x,float y,float d,int type){
  fill(c,Color.WHITE);
- if(type==0){ // message bubble
- c.drawRoundRect(x-5*d,y-5*d,x+5*d,y+4*d,4*d,4*d,p);Path tail=new Path();tail.moveTo(x-2*d,y+2*d);tail.lineTo(x-4*d,y+6*d);tail.lineTo(x+1*d,y+3*d);tail.close();c.drawPath(tail,p);fill(c,0xff536b88);c.drawCircle(x-2*d,y-1*d,.7f*d,p);c.drawCircle(x,y-1*d,.7f*d,p);c.drawCircle(x+2*d,y-1*d,.7f*d,p);
- }else if(type==1){ // small app glyph (rounded square + star)
- c.drawRoundRect(x-4.5f*d,y-4.5f*d,x+4.5f*d,y+4.5f*d,2*d,2*d,p);fill(c,0xff536b88);Path star=new Path();star.moveTo(x,y-3*d);star.lineTo(x+1*d,y-1*d);star.lineTo(x+3*d,y);star.lineTo(x+1*d,y+1*d);star.lineTo(x,y+3*d);star.lineTo(x-1*d,y+1*d);star.lineTo(x-3*d,y);star.lineTo(x-1*d,y-1*d);star.close();c.drawPath(star,p);
- }else{ // check mark
- stroke(Color.WHITE,1.8f*d);path(c,d,x-4,y,x-1,y+3,x+4,y-4);
- }
- }
+ if(type==0){ // Messenger-style circular chat badge with lightning
+ Path bubble=new Path();bubble.moveTo(x-5.2f*d,y-4.5f*d);bubble.cubicTo(x-1*d,y-6*d,x+5*d,y-3.5f*d,x+5*d,y+1*d);bubble.cubicTo(x+5*d,y+4*d,x+2*d,y+5*d,x-1*d,y+4.5f*d);bubble.lineTo(x-4*d,y+7*d);bubble.lineTo(x-3.5f*d,y+3.2f*d);bubble.cubicTo(x-6*d,y+1*d,x-6*d,y-2*d,x-5.2f*d,y-4.5f*d);bubble.close();c.drawPath(bubble,p);
+ fill(c,0xff536b88);Path bolt=new Path();bolt.moveTo(x-1.5f*d,y-2.8f*d);bolt.lineTo(x+1.4f*d,y-1*d);bolt.lineTo(x-.2f*d,y+.1f*d);bolt.lineTo(x+1.2f*d,y+2.4f*d);bolt.lineTo(x-2*d,y+.3f*d);bolt.lineTo(x-.5f*d,y-.8f*d);bolt.close();c.drawPath(bolt,p);
+ }else if(type==1){ // classic notification bell
+ fill(c,Color.WHITE);Path bell=new Path();bell.moveTo(x-4.8f*d,y+2.8f*d);bell.cubicTo(x-3.2f*d,y+1*d,x-3.8f*d,y-4.5f*d,x,y-5.2f*d);bell.cubicTo(x+3.8f*d,y-4.5f*d,x+3.2f*d,y+1*d,x+4.8f*d,y+2.8f*d);bell.close();c.drawPath(bell,p);c.drawCircle(x,y-5.4f*d,1.2f*d,p);c.drawRoundRect(x-5.2f*d,y+2.2f*d,x+5.2f*d,y+4*d,1*d,1*d,p);c.drawCircle(x,y+5*d,1.5f*d,p);
+ }else{ // shield with check
+ Path shield=new Path();shield.moveTo(x,y-6*d);shield.cubicTo(x+2.2f*d,y-4.5f*d,x+4.5f*d,y-4.2f*d,x+5*d,y-3.8f*d);shield.lineTo(x+4.5f*d,y+1.5f*d);shield.cubicTo(x+3.5f*d,y+4*d,x+1.5f*d,y+5.5f*d,x,y+6*d);shield.cubicTo(x-1.5f*d,y+5.5f*d,x-3.5f*d,y+4*d,x-4.5f*d,y+1.5f*d);shield.lineTo(x-5*d,y-3.8f*d);shield.cubicTo(x-4.5f*d,y-4.2f*d,x-2.2f*d,y-4.5f*d,x,y-6*d);shield.close();c.drawPath(shield,p);stroke(0xff536b88,1.7f*d);path(c,d,x-2.5f,y,x-.5f,y+2,x+3,y-2.5f);
+ }}
  protected void onDraw(Canvas c){float d=getResources().getDisplayMetrics().density,w=getWidth();
  p.setShader(new LinearGradient(0,24*d,w,54*d,new int[]{0xf06d829e,0xf04b6381,0xf039506f},null,Shader.TileMode.CLAMP));c.drawRect(0,24*d,w,54*d,p);p.setShader(null);
- text(c,new SimpleDateFormat("h:mm a",java.util.Locale.US).format(new Date()),18*d,44*d,15*d,true);
- notif(c,76,39,d,0);notif(c,88,39,d,1);notif(c,100,39,d,2);
+ text(c,new SimpleDateFormat("h:mm",java.util.Locale.US).format(new Date()),18*d,44*d,15*d,true);
+ notif(c,76,39,d,0);notif(c,106,39,d,1);notif(c,136,39,d,2);
  // compact cellular bars, closely grouped with Wi-Fi and battery
  fill(c,Color.WHITE);float sx=w-105*d;for(int i=0;i<4;i++)c.drawRoundRect(sx+i*4.4f*d,49*d-(5+i*3.5f)*d,sx+(i+1)*4.4f*d-0.8f*d,49*d,1.3f*d,1.3f*d,p);
  // Apple-like Wi-Fi glyph: three separate solid curved signal bands + dot

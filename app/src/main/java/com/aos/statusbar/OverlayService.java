@@ -52,20 +52,41 @@ public class OverlayService extends Service{
  wifiInner.cubicTo(wx+0.3f*d,wy-1.1f*d,wx-0.3f*d,wy-1.1f*d,wx-0.8f*d,wy-0.6f*d);
  wifiInner.cubicTo(wx-1.5f*d,wy+0.2f*d,wx-2.4f*d,wy+0.2f*d,wx-3.4f*d,wy-1*d);wifiInner.close();c.drawPath(wifiInner,p);
  c.drawCircle(wx,wy,1.45f*d,p);
- // Rebuilt iOS-style battery: capsule, level fill and centered percentage
+ // iOS battery renderer — compact body, true proportional fill, transparent digits
  Intent b=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
  int lev=b==null?100:b.getIntExtra(BatteryManager.EXTRA_LEVEL,100),sc=b==null?100:b.getIntExtra(BatteryManager.EXTRA_SCALE,100);
- int pct=sc>0?Math.max(0,Math.min(100,lev*100/sc)):100;
- float bx=w-49*d,by=8.5f*d,bw=37*d,bh=18*d;
- fill(c,0x18ffffff);c.drawRoundRect(bx,by,bx+bw,by+bh,4.2f*d,4.2f*d,p);
- float ix=bx+1.5f*d,iy=by+1.5f*d,iw=bw-3*d,ih=bh-3*d;
- boolean charging=b!=null&&(b.getIntExtra(BatteryManager.EXTRA_STATUS,-1)==BatteryManager.BATTERY_STATUS_CHARGING||b.getIntExtra(BatteryManager.EXTRA_STATUS,-1)==BatteryManager.BATTERY_STATUS_FULL);
- int levelColor=charging?0xff65d66f:Color.WHITE;
- if(pct>0){fill(c,levelColor);c.drawRoundRect(ix,iy,ix+iw*pct/100f,iy+ih,3.1f*d,3.1f*d,p);}
- stroke(0xfff7f9fc,1.15f*d);c.drawRoundRect(bx,by,bx+bw,by+bh,4.2f*d,4.2f*d,p);
- fill(c,0xfff7f9fc);c.drawRoundRect(bx+bw+1*d,by+4.4f*d,bx+bw+2.8f*d,by+9.6f*d,.8f*d,.8f*d,p);
- p.setShader(null);p.setStyle(Paint.Style.FILL);p.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));p.setTextSize(9.2f*d);
- String batteryLabel=pct+"%";float labelW=p.measureText(batteryLabel);
- fill(c,pct>=55?0xff26384a:Color.WHITE);c.drawText(batteryLabel,bx+(bw-labelW)/2,by+12.2f*d,p);
+ int pct=sc>0?Math.max(0,Math.min(100,Math.round(lev*100f/sc))):100;
+ int status=b==null?-1:b.getIntExtra(BatteryManager.EXTRA_STATUS,-1);
+ boolean charging=status==BatteryManager.BATTERY_STATUS_CHARGING||status==BatteryManager.BATTERY_STATUS_FULL;
+ float bw=27*d,bh=14*d,bx=w-34*d,by=15*d,rad=3.1f*d;
+ RectF body=new RectF(bx,by,bx+bw,by+bh);
+ // terminal and 40%-opacity empty body
+ fill(c,0x66ffffff);c.drawRoundRect(body,rad,rad,p);
+ c.drawRoundRect(bx+bw+0.8f*d,by+4.1f*d,bx+bw+2.2f*d,by+9.9f*d,0.7f*d,0.7f*d,p);
+ // Clip the level rectangle to the capsule; partial leading edge remains square
+ int fc=charging?0xff35d05b:(pct<=20?0xffff453a:Color.WHITE);
+ c.save();Path clip=new Path();clip.addRoundRect(body,rad,rad,Path.Direction.CW);c.clipPath(clip);
+ if(pct>0){fill(c,fc);c.drawRect(bx,by,bx+bw*pct/100f,by+bh,p);}
+ c.restore();
+ // Percentage is a genuine transparent knockout, not painted text
+ if(pct>=100){fill(c,fc);c.drawRoundRect(body,rad,rad,p);}
+ if(pct>0){
+   int layer=c.saveLayer(body,null);
+   fill(c,fc);c.drawRoundRect(body,rad,rad,p);
+   p.setShader(null);p.setStyle(Paint.Style.FILL);p.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));p.setTextSize(8.0f*d);
+   p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+   String digits=String.valueOf(pct);float tw=p.measureText(digits);
+   c.drawText(digits,bx+(bw-tw)/2,by+9.7f*d,p);
+   p.setXfermode(null);c.restoreToCount(layer);
+ }
+ // Charging bolt is white and centered over the digit group
+ if(charging){
+   fill(c,Color.WHITE);Path bolt=new Path();float cx=bx+bw/2,cy=by+bh/2;
+   bolt.moveTo(cx+1.4f*d,cy-5.2f*d);bolt.lineTo(cx-2.4f*d,cy+0.2f*d);bolt.lineTo(cx-0.2f*d,cy+0.2f*d);bolt.lineTo(cx-1.2f*d,cy+5.0f*d);bolt.lineTo(cx+2.8f*d,cy-0.8f*d);bolt.lineTo(cx+0.5f*d,cy-0.8f*d);bolt.close();c.drawPath(bolt,p);
+ }
+ // Crisp outer contour and terminal on top
+ stroke(0xfff7f9fc,1.0f*d);c.drawRoundRect(body,rad,rad,p);
+ fill(c,0xfff7f9fc);c.drawRoundRect(bx+bw+0.8f*d,by+4.1f*d,bx+bw+2.2f*d,by+9.9f*d,0.7f*d,0.7f*d,p);
+ p.setShader(null);p.setStyle(Paint.Style.FILL);
  }}
 }
